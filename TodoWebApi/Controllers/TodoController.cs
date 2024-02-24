@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using TodoWebApi.Commands;
 using TodoWebApi.Models;
 using TodoWebApi.Queries;
 
@@ -11,7 +12,10 @@ public class TodoController : ControllerBase
 {
     private readonly Mediator _mediator;
 
-    public TodoController(Mediator mediator) => _mediator = mediator;
+    public TodoController(Mediator mediator)
+    {
+        _mediator = mediator;
+    }
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<TodoTask>>> GetAllTodos()
@@ -26,5 +30,13 @@ public class TodoController : ControllerBase
             return Ok(todo);
 
         return NotFound();
+    }
+
+    [HttpPost]
+    public async Task<ActionResult> CreateTask([FromBody] NewTaskDto request)
+    {
+        // todo what if not created?
+        await _mediator.Send(new AddTaskCommand(request));
+        return Created();
     }
 }
