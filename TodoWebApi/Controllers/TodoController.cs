@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TodoWebApi.Commands;
 using TodoWebApi.Db;
-using TodoWebApi.Models;
+using TodoWebApi.DTOs;
 using TodoWebApi.Queries;
 
 namespace TodoWebApi.Controllers;
