@@ -11,9 +11,9 @@ namespace TodoWebApi.Controllers;
 [Route("api/[controller]")]
 public class TodoController : ControllerBase
 {
-    private readonly Mediator _mediator;
+    private readonly IMediator _mediator;
 
-    public TodoController(Mediator mediator)
+    public TodoController(IMediator mediator)
     {
         _mediator = mediator;
     }
@@ -61,7 +61,4 @@ public class TodoController : ControllerBase
 
         return CreatedAtRoute(nameof(GetTodoById), new { id = addedTask.Id }, addedTask);
     }
-
-    [HttpPost, Route("fill_db")]
-    public async Task FillDb(AppDbContext context) => await context.FillWithData();
 }

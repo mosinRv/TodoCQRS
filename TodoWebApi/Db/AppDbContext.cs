@@ -21,13 +21,15 @@ public sealed class SqLiteDbContext : AppDbContext
 
 public static class DbExtension
 {
+    private const string Pwd = "Qweqwe_123";
     public static async Task FillWithData(this AppDbContext context)
     {
         var users = new User[]
         {
             new()
             {
-                Name = "Alice",
+                NickName = "Alice",
+                PasswordHash = Pwd,
                 Tasks =
                 [
                     new TodoTask()
@@ -39,14 +41,15 @@ public static class DbExtension
                     new TodoTask()
                     {
                         Title = "Dinner",
-                        Description = "Order some chinise food for dinner",
+                        Description = "Order some Chinese food for dinner",
                         IsDone = false
                     }
                 ]
             },
             new()
             {
-                Name = "Bob",
+                NickName = "Bob",
+                PasswordHash = Pwd,
                 Tasks = new List<TodoTask>()
                 {
                     new()
@@ -55,10 +58,11 @@ public static class DbExtension
                         IsDone = true,
                         Description = "Try new shampoo =D"
                     }
-                }
+                },
             }
         };
 
         await context.Users.AddRangeAsync(users);
+        await context.SaveChangesAsync();
     }
 }

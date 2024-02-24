@@ -8,7 +8,10 @@ public class User
     public Guid Id { get; set; }
 
     [MaxLength(100)]
-    public string? Name { get; set; }
+    public required string NickName { get; set; }
+
+    [MaxLength(100)]
+    public required string PasswordHash { get; set; }
 
     public List<TodoTask>? Tasks { get; set; }
 }

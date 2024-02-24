@@ -11,7 +11,6 @@ builder.Services.AddSwaggerGen(opts =>
     opts.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
     {
         Type = SecuritySchemeType.Http,
-        // In = ParameterLocation.Header,
         Scheme = "Bearer",
         BearerFormat = "JWT",
         Name = "Authorization",
@@ -35,8 +34,8 @@ builder.Services.AddSwaggerGen(opts =>
 
 builder.EnableSecureByDefault();
 builder.AddMyJwtAuthentication();
-
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(Program).Assembly));
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+// builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(Program).Assembly));
 builder.Services.AddDbContext<AppDbContext, SqLiteDbContext>();
 var app = builder.Build();
 
