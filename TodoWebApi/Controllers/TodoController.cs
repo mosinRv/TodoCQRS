@@ -61,4 +61,7 @@ public class TodoController : ControllerBase
 
         return CreatedAtRoute(nameof(GetTodoById), new { id = addedTask.Id }, addedTask);
     }
+
+    [HttpPost]
+    public async Task FillDb(AppDbContext context) => await context.FillWithData();
 }

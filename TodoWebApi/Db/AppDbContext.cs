@@ -19,3 +19,47 @@ public sealed class SqLiteDbContext : AppDbContext
         optionsBuilder.LogTo(Console.WriteLine, LogLevel.Error);
     }
 }
+
+public static class DbExtension
+{
+    public static async Task FillWithData(this AppDbContext context)
+    {
+        var users = new User[]
+        {
+            new()
+            {
+                Name = "Alice",
+                Tasks =
+                [
+                    new TodoTask()
+                    {
+                        Title = "Wash car",
+                        Description = "I like when my car is clean. So, it need some cleaning",
+                        IsDone = false
+                    },
+                    new TodoTask()
+                    {
+                        Title = "Dinner",
+                        Description = "Order some chinise food for dinner",
+                        IsDone = false
+                    }
+                ]
+            },
+            new()
+            {
+                Name = "Bob",
+                Tasks = new List<TodoTask>()
+                {
+                    new()
+                    {
+                        Title = "Take a shower",
+                        IsDone = true,
+                        Description = "Try new shampoo =D"
+                    }
+                }
+            }
+        };
+
+        await context.Users.AddRangeAsync(users);
+    }
+}

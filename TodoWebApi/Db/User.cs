@@ -6,7 +6,9 @@ public class User
 {
     [Key]
     public Guid Id { get; set; }
+
+    [MaxLength(100)]
     public string? Name { get; set; }
-    public bool IsCool { get; set; }
+
     public List<TodoTask>? Tasks { get; set; }
 }
