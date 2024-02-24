@@ -50,7 +50,7 @@ public class AuthController : ControllerBase
 
     private string GenerateToken(string username)
     {
-        var secretKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(
+        var secretKey = new (Encoding.ASCII.GetBytes(
             _config.GetValue<string>("Authentication:SecretKey") ?? throw new InvalidOperationException()));
         var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
         
