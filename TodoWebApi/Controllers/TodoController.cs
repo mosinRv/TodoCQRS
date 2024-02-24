@@ -18,26 +18,47 @@ public class TodoController : ControllerBase
         _mediator = mediator;
     }
 
+    /// <summary>
+    /// Get tasks of the user
+    /// </summary>
+    /// <returns><see cref="TodoTask"/></returns>
     [HttpGet]
     public async Task<ActionResult<IEnumerable<TodoTask>>> GetAllTodos()
     {
-        var todos = await _mediator.Send(new GetTasksQuery());
+        // todo get guid from jwt
+        Guid userId = new();
+        var todos = await _mediator.Send(new GetTasksQuery(userId));
         return Ok(todos);
     }
-    [HttpGet, Route("{id}")]
-    public async Task<ActionResult<IEnumerable<TodoTask>>> GetTodoById(int id)
-    {
-        if(await _mediator.Send(new GetTaskByIdQuery(id)) is {} todo)
-            return Ok(todo);
 
-        return NotFound();
+ 
+    /// <summary>
+    /// Get user's task by id/
+    /// </summary>
+    /// <param name="id">Task id</param>
+    /// <returns><see cref="TodoTask"/></returns>
+    [HttpGet, Route("{id}")]
+    public async Task<ActionResult<TodoTask>> GetTodoById(Guid id)
+    {
+        // todo get guid from jwt
+        Guid userId = new();
+        var todoTask = await _mediator.Send(new GetTaskByIdQuery(userId, id));
+
+        return todoTask != null ? Ok(todoTask) : NotFound();
     }
 
+    /// <summary>
+    /// Add new task to the user's list
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns>Created task</returns>
     [HttpPost]
     public async Task<ActionResult> CreateTask([FromBody] NewTaskDto request)
     {
-        // todo what if not created?
-        await _mediator.Send(new AddTaskCommand(request));
-        return Created();
+        // todo get guid from jwt
+        Guid userId = new();
+        var addedTask = await _mediator.Send(new AddTaskCommand(userId, request));
+
+        return CreatedAtRoute(nameof(GetTodoById), new { id = addedTask.Id }, addedTask);
     }
 }

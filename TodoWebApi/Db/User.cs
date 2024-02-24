@@ -8,5 +8,5 @@ public class User
     public Guid Id { get; set; }
     public string? Name { get; set; }
     public bool IsCool { get; set; }
-    public TodoTask[]? Tasks { get; set; }
+    public List<TodoTask>? Tasks { get; set; }
 }
