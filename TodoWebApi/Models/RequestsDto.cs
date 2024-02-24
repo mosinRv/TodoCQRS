@@ -1,4 +1,6 @@
-﻿namespace TodoWebApi.Models;
+﻿using TodoWebApi.Db;
+
+namespace TodoWebApi.Models;
 
 /// <summary>
 /// Request to create new <see cref="TodoTask"/>
