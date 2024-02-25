@@ -26,7 +26,7 @@ public class TodoController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<TodoTask>>> GetAllTodos()
     {
-        if (TryExtractUserId(out var userId)) return BadRequest(NoUserIdReqResultMsg);
+        if (!TryExtractUserId(out var userId)) return BadRequest(NoUserIdReqResultMsg);
 
         var todos = await _mediator.Send(new GetTasksQuery(userId));
         return Ok(todos);
@@ -41,7 +41,7 @@ public class TodoController : ControllerBase
     [HttpGet, Route("{id}")]
     public async Task<ActionResult<TodoTask>> GetTodoById(Guid id)
     {
-        if (TryExtractUserId(out var userId)) return BadRequest(NoUserIdReqResultMsg);
+        if (!TryExtractUserId(out var userId)) return BadRequest(NoUserIdReqResultMsg);
 
         var todoTask = await _mediator.Send(new GetTaskByIdQuery(userId, id));
 
@@ -56,7 +56,7 @@ public class TodoController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> CreateTask([FromBody] NewTaskDto request)
     {
-        if (TryExtractUserId(out var userId)) return BadRequest(NoUserIdReqResultMsg);
+        if (!TryExtractUserId(out var userId)) return BadRequest(NoUserIdReqResultMsg);
 
         var addedTask = await _mediator.Send(new AddTaskCommand(userId, request));
 
@@ -66,7 +66,7 @@ public class TodoController : ControllerBase
     [HttpPost, Route("list")]
     public async Task<ActionResult> CreateTaskList([FromBody] NewListDto request)
     {
-        if (TryExtractUserId(out var userId)) return BadRequest(NoUserIdReqResultMsg);
+        if (!TryExtractUserId(out var userId)) return BadRequest(NoUserIdReqResultMsg);
         var addedList = await _mediator.Send(new AddListCommand(userId, request));
 
         return Created(addedList.Id.ToString(), addedList);

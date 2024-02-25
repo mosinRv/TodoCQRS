@@ -20,11 +20,16 @@ public class AuthController : ControllerBase
         _mediator = mediator;
     }
 
+    /// <summary>
+    /// Test authentication
+    /// </summary>
+    /// <returns>userId if jwt contains it </returns>
     [HttpGet]
     [Authorize]
     public IActionResult Test()
     {
         var user = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        
         return Ok(user ?? "Err");
     }
 
