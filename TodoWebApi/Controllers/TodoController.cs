@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using System.Security.Claims;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TodoWebApi.Commands;
 using TodoWebApi.Db;
@@ -25,8 +26,8 @@ public class TodoController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<TodoTask>>> GetAllTodos()
     {
-        // todo get guid from jwt
-        Guid userId = new();
+        if (TryExtractUserId(out var userId)) return BadRequest(NoUserIdReqResultMsg);
+
         var todos = await _mediator.Send(new GetTasksQuery(userId));
         return Ok(todos);
     }
@@ -40,8 +41,8 @@ public class TodoController : ControllerBase
     [HttpGet, Route("{id}")]
     public async Task<ActionResult<TodoTask>> GetTodoById(Guid id)
     {
-        // todo get guid from jwt
-        Guid userId = new();
+        if (TryExtractUserId(out var userId)) return BadRequest(NoUserIdReqResultMsg);
+
         var todoTask = await _mediator.Send(new GetTaskByIdQuery(userId, id));
 
         return todoTask != null ? Ok(todoTask) : NotFound();
@@ -55,10 +56,23 @@ public class TodoController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> CreateTask([FromBody] NewTaskDto request)
     {
-        // todo get guid from jwt
-        Guid userId = new();
+        if (TryExtractUserId(out var userId)) return BadRequest(NoUserIdReqResultMsg);
+
         var addedTask = await _mediator.Send(new AddTaskCommand(userId, request));
 
         return CreatedAtRoute(nameof(GetTodoById), new { id = addedTask.Id }, addedTask);
     }
+
+    /// <summary>
+    /// Extracting userId from JWT 
+    /// </summary>
+    /// <param name="userId">special guid for user</param>
+    /// <returns>true if the extracting was successful; otherwise, false</returns>
+    private bool TryExtractUserId(out Guid userId)
+    {
+        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        return Guid.TryParse(userIdStr, out userId);
+    }
+
+    private const string NoUserIdReqResultMsg = "Can't find userId in JWT";
 }
