@@ -22,7 +22,7 @@ public class AddTaskHandler : IRequestHandler<AddTaskCommand, TodoTask>
             throw new UserNotFoundException();
 
         var task = request.Task.FormTaskEntity();
-        if (!(user.Lists?.FirstOrDefault(l => l.Description == request.Task.TaskListTitle) is { } list))
+        if (!(user.Lists?.FirstOrDefault(l => l.Title == request.Task.TaskListTitle) is { } list))
             throw new ListNotFoundException();
 
         if (list.TodoTasks is null) list.TodoTasks = new();

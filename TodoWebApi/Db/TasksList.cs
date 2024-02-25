@@ -4,6 +4,9 @@ namespace TodoWebApi.Db;
 
 public class TasksList
 {
+    [Key]
+    public Guid Id { get; set; }
+
     [MaxLength(100)]
     public required string Title { get; set; }
     

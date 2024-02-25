@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoWebApi", "TodoWebApi\TodoWebApi.csproj", "{1780ED58-AE3C-4D9D-9961-0D5AD2668834}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoTesting", "TodoTesting\TodoTesting.csproj", "{7BEE8F57-4699-43A8-8FB8-6AAD18DEFD6D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{1780ED58-AE3C-4D9D-9961-0D5AD2668834}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1780ED58-AE3C-4D9D-9961-0D5AD2668834}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1780ED58-AE3C-4D9D-9961-0D5AD2668834}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7BEE8F57-4699-43A8-8FB8-6AAD18DEFD6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BEE8F57-4699-43A8-8FB8-6AAD18DEFD6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BEE8F57-4699-43A8-8FB8-6AAD18DEFD6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BEE8F57-4699-43A8-8FB8-6AAD18DEFD6D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
