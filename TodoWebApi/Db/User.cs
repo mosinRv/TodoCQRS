@@ -11,7 +11,11 @@ public class User
     public required string NickName { get; set; }
 
     [MaxLength(100)]
+    [EmailAddress]
+    public required string Email { get; set; } 
+
+    [MaxLength(100)]
     public required string PasswordHash { get; set; }
 
-    public List<TodoTask>? Tasks { get; set; }
+    public List<TasksList>? Lists { get; set; }
 }

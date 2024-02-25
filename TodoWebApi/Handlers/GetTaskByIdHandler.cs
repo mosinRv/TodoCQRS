@@ -16,10 +16,15 @@ public class GetTaskByIdHandler : IRequestHandler<GetTaskByIdQuery, TodoTask?>
 
     public async Task<TodoTask?> Handle(GetTaskByIdQuery request, CancellationToken ctx)
     {
-        var user = await _context.Users.AsNoTracking().Include(u => u.Tasks)
-            .FirstOrDefaultAsync(u => u.Id == request.UserId, ctx);
-        if(user is null) throw new Exception("User not Found");
+        if (!(await _context.Users
+                .Include(u => u.Lists)!
+                .ThenInclude(tasksList => tasksList.TodoTasks)
+                .FirstOrDefaultAsync(u => u.Id == request.UserId, ctx) is { } user))
+            throw new UserNotFoundException();
 
-        return user.Tasks?.FirstOrDefault(t => t.Id == request.TaskId);
+        var task = user.Lists?.SelectMany(l => l.TodoTasks ?? [])
+            .FirstOrDefault(t => t.Id == request.TaskId);
+
+        return task;
     }
 }

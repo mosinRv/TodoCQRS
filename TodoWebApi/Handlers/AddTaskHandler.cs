@@ -15,11 +15,18 @@ public class AddTaskHandler : IRequestHandler<AddTaskCommand, TodoTask>
 
     public async Task<TodoTask> Handle(AddTaskCommand request, CancellationToken ctx)
     {
-        if (!(await _context.Users.FirstOrDefaultAsync(u => u.Id == request.UserId, ctx) is { } user))
-            throw new Exception("user not fund");
+        if (!(await _context.Users
+                .Include(u => u.Lists)!
+                .ThenInclude(tasksList => tasksList.TodoTasks)
+                .FirstOrDefaultAsync(u => u.Id == request.UserId, ctx) is { } user))
+            throw new UserNotFoundException();
 
         var task = request.Task.FormTaskEntity();
-        user.Tasks!.Add(task);
+        if (!(user.Lists?.FirstOrDefault(l => l.Description == request.Task.TaskListTitle) is { } list))
+            throw new ListNotFoundException();
+
+        if (list.TodoTasks is null) list.TodoTasks = new();
+        list.TodoTasks.Add(task);
         await _context.SaveChangesAsync(ctx);
         return task;
     }

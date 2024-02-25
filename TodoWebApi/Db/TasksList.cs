@@ -2,23 +2,13 @@
 
 namespace TodoWebApi.Db;
 
-public class TodoTask
+public class TasksList
 {
-    [Key]
-    public Guid Id { get; set; }
-
     [MaxLength(100)]
     public required string Title { get; set; }
-
+    
     [MaxLength(250)]
     public required string Description { get; set; }
 
-    public TaskStatus Status { get;  set; }
-}
-
-
-public enum TaskStatus{
-    Waiting,
-    Working,
-    Done
+    public List<TodoTask>? TodoTasks { get; set; }
 }

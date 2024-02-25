@@ -5,7 +5,7 @@ using TodoWebApi.Queries;
 
 namespace TodoWebApi.Handlers;
 
-public class GetTasksHandler : IRequestHandler<GetTasksQuery, IEnumerable<TodoTask>>
+public class GetTasksHandler : IRequestHandler<GetTasksQuery, IEnumerable<TasksList>>
 {
     private readonly AppDbContext _context;
 
@@ -14,12 +14,14 @@ public class GetTasksHandler : IRequestHandler<GetTasksQuery, IEnumerable<TodoTa
         _context = context;
     }
 
-    public async Task<IEnumerable<TodoTask>> Handle(GetTasksQuery request, CancellationToken ctx)
+    public async Task<IEnumerable<TasksList>> Handle(GetTasksQuery request, CancellationToken ctx)
     {
-        var user = await _context.Users.AsNoTracking().Include(u => u.Tasks)
-            .FirstOrDefaultAsync(u => u.Id == request.UserId, ctx);
-        if(user is null) throw new Exception("Not Found");
+        if (!(await _context.Users
+                .Include(u => u.Lists)!
+                .ThenInclude(tasksList => tasksList.TodoTasks)
+                .FirstOrDefaultAsync(u => u.Id == request.UserId, ctx) is { } user))
+            throw new UserNotFoundException();
 
-        return user.Tasks ?? [];
+        return user.Lists ?? [];
     }
 }

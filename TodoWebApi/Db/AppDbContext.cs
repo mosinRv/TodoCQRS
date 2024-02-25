@@ -29,36 +29,37 @@ public static class DbExtension
             new()
             {
                 NickName = "Alice",
+                Email = "abc@def.com",
                 PasswordHash = Pwd,
-                Tasks =
+                Lists = 
                 [
-                    new TodoTask()
+                    new TasksList()
                     {
-                        Title = "Wash car",
-                        Description = "I like when my car is clean. So, it need some cleaning",
-                        IsDone = false
-                    },
-                    new TodoTask()
-                    {
-                        Title = "Dinner",
-                        Description = "Order some Chinese food for dinner",
-                        IsDone = false
+                        Title = "First List",
+                        Description = "Do this and that",
+                        TodoTasks =
+                        [
+                            new TodoTask()
+                            {
+                                Title = "Wash car",
+                                Description = "I like when my car is clean. So, it need some cleaning",
+                                Status = TaskStatus.Working
+                            },
+                            new TodoTask()
+                            {
+                                Title = "Dinner",
+                                Description = "Order some Chinese food for dinner",
+                                Status = TaskStatus.Waiting
+                            }
+                        ]
                     }
                 ]
             },
             new()
             {
                 NickName = "Bob",
+                Email = "bob@def.com",
                 PasswordHash = Pwd,
-                Tasks = new List<TodoTask>()
-                {
-                    new()
-                    {
-                        Title = "Take a shower",
-                        IsDone = true,
-                        Description = "Try new shampoo =D"
-                    }
-                },
             }
         };
 

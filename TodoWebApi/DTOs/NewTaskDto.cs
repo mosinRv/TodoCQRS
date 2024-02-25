@@ -1,4 +1,5 @@
 ﻿using TodoWebApi.Db;
+using TaskStatus = TodoWebApi.Db.TaskStatus;
 
 namespace TodoWebApi.DTOs;
 
@@ -10,12 +11,13 @@ public record NewTaskDto()
 {
     public required string Title { get; set; }
     public required string Description { get; set; }
-    public bool IsDone { get;  set; }
+    public TaskStatus Status { get;  set; }
+    public required string TaskListTitle { get; set; }
 
     public TodoTask FormTaskEntity() => new()
     {
         Title = this.Title,
         Description = this.Description,
-        IsDone = this.IsDone
+        Status = this.Status
     };
 }
