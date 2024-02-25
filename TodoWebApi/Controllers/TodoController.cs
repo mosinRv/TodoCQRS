@@ -63,6 +63,15 @@ public class TodoController : ControllerBase
         return CreatedAtRoute(nameof(GetTodoById), new { id = addedTask.Id }, addedTask);
     }
 
+    [HttpPost, Route("list")]
+    public async Task<ActionResult> CreateTaskList([FromBody] NewListDto request)
+    {
+        if (TryExtractUserId(out var userId)) return BadRequest(NoUserIdReqResultMsg);
+        var addedList = await _mediator.Send(new AddListCommand(userId, request));
+
+        return Created(addedList.Id.ToString(), addedList);
+    }
+
     /// <summary>
     /// Extracting userId from JWT 
     /// </summary>

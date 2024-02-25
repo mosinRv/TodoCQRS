@@ -60,4 +60,20 @@ public class UnitTest1
         result.Should().NotBeNull();
         result!.Id.Should().Be(taskId);
     }
+
+
+    [Fact]
+    public async Task CreateNewList_Test()
+    {
+        var handler = new AddListHandler(_context);
+        var userId = DbTestExtensions.DefaultUsers[0].Id;
+        var query = new AddListCommand(userId, new NewListDto()
+        {
+            Title = "New cool List",
+            Description = "Description",
+        });
+        
+        var result = await handler.Handle(query, default);
+        result.Id.Should().NotBe(Guid.Empty);
+    }
 }
