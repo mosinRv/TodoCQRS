@@ -48,6 +48,15 @@ public class TodoController : ControllerBase
         return todoTask != null ? Ok(todoTask) : NotFound();
     }
 
+    [HttpPut]
+    public async Task<ActionResult<TodoTask>> UpdateStatus(UpdateTaskDto request)
+    {
+        if (!TryExtractUserId(out var userId)) return BadRequest(NoUserIdReqResultMsg);
+
+        var updatedTask = await _mediator.Send(new UpdateTaskStatusCommand(userId, request));
+        return Ok(updatedTask);
+    }
+
     /// <summary>
     /// Add new task to the user's list
     /// </summary>
@@ -60,7 +69,7 @@ public class TodoController : ControllerBase
 
         var addedTask = await _mediator.Send(new AddTaskCommand(userId, request));
 
-        return CreatedAtRoute(nameof(GetTodoById), new { id = addedTask.Id }, addedTask);
+        return Created(addedTask.Id.ToString() , addedTask);
     }
 
     [HttpPost, Route("list")]

@@ -61,7 +61,6 @@ public class UnitTest1
         result!.Id.Should().Be(taskId);
     }
 
-
     [Fact]
     public async Task CreateNewList_Test()
     {
@@ -75,5 +74,20 @@ public class UnitTest1
         
         var result = await handler.Handle(query, default);
         result.Id.Should().NotBe(Guid.Empty);
+    }
+
+    [Fact]
+    public async Task UpdateTaskStatus_Test()
+    {
+        var handler = new UpdateTaskHandler(_context);
+        var userId = DbTestExtensions.DefaultUsers[0].Id;
+        var taskId = DbTestExtensions.DefaultUsers[0].Lists![0].TodoTasks![0].Id;
+        var query = new UpdateTaskStatusCommand(
+            userId,
+            new UpdateTaskDto(taskId, TaskStatus.Done));
+        
+        var result = await handler.Handle(query, default);
+        result.Id.Should().NotBe(Guid.Empty);
+        result.Status.Should().Be(TaskStatus.Done);
     }
 }
